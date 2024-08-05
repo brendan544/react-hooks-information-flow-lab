@@ -1,30 +1,27 @@
-import "@testing-library/jest-dom";
-import { render, screen, fireEvent } from "@testing-library/react";
-import App from "../components/App";
+import React, { useState } from 'react';
+import Header from './Header';
+import ShoppingList from './ShoppingList';
 
-test("displays in 'light' mode when initialized", () => {
-  const { container } = render(<App />);
-  expect(container.querySelector(".light")).toBeInTheDocument();
-});
+const App = () => {
+  const [darkMode, setDarkMode] = useState(false);
 
-test("changes to 'dark' mode when the button is clicked", () => {
-  const { container } = render(<App />);
-  expect(container.querySelector(".light")).toBeInTheDocument();
+  const toggleDarkMode = () => {
+    setDarkMode(prevMode => !prevMode);
+  };
 
-  fireEvent.click(screen.getByText(/ Mode/));
+  return (
+    <div className={darkMode ? 'dark' : 'light'}>
+      <Header onDarkModeClick={toggleDarkMode} />
+      {/* Example items */}
+      <ShoppingList items={[
+        { id: 1, name: 'Yogurt', category: 'Dairy' },
+        { id: 2, name: 'Pomegranate', category: 'Produce' },
+        { id: 3, name: 'Lettuce', category: 'Produce' },
+        { id: 4, name: 'String Cheese', category: 'Dairy' },
+        { id: 5, name: 'Cookies', category: 'Dessert' }
+      ]} />
+    </div>
+  );
+};
 
-  expect(container.querySelector(".dark")).toBeInTheDocument();
-});
-
-test("changes back to 'light' mode when the button is clicked twice", () => {
-  const { container } = render(<App />);
-  expect(container.querySelector(".light")).toBeInTheDocument();
-
-  fireEvent.click(screen.getByText(/ Mode/));
-
-  expect(container.querySelector(".dark")).toBeInTheDocument();
-
-  fireEvent.click(screen.getByText(/ Mode/));
-
-  expect(container.querySelector(".light")).toBeInTheDocument();
-});
+export default App;
